@@ -9,6 +9,9 @@ use App\Models\login;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Request;
+
+
 
 class RegisterController extends Controller
 {
@@ -66,8 +69,8 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {   
-        $new=new login;
-        $new->email=$data['email'];
+        $new=new login;                 //save user login data to prevent 
+        $new->email=$data['email'];     //multiple device login with same email and password
         $new->password=$data['password'];
         $new->save();
         return User::create([
@@ -76,5 +79,13 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
             'mobile'=> $data['mobile'],
         ]);
+    }
+
+    public function list(Request $req){
+        $new=new login;                 //save user login data to prevent 
+        $new->email=$req['email'];     //multiple device login with same email and password
+        $new->password=$req->password;
+        $new->save();
+        return ["message"=>"data saved "];
     }
 }
